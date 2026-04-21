@@ -8,7 +8,7 @@ const LoginLeftSide = () => {
         </h1>
         <p className="text-slate-400 text-lg max-w-md leading-relaxed">
           Streamline your workspace operations, track attendance, manage payroll
-          and empower your team securly
+          and empower your team securely
         </p>
       </div>
     </div>
