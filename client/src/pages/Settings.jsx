@@ -10,19 +10,18 @@ const Settings = () => {
   const [loading, setLoading] = useState(true);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
 
-
   const fetchProfile = async () => {
     setProfile(dummyProfileData);
-    setTimeout(()=>{
+    setTimeout(() => {
       setLoading(false);
-    },1000) 
-  }
+    }, 1000);
+  };
 
-  useEffect(()=>{
-    fetchProfile()
-  },[])
+  useEffect(() => {
+    fetchProfile();
+  }, []);
 
-  if(loading) return <Loading/>
+  if (loading) return <Loading />;
 
   return (
     <div className="animate-fade-in">
@@ -31,24 +30,32 @@ const Settings = () => {
         <p className="page-subtitle">Manage your account and prefereces</p>
       </div>
 
-      {profile && <ProfileForm initialData={profile} onSuccess={fetchProfile}/>}
+      {profile && (
+        <ProfileForm initialData={profile} onSuccess={fetchProfile} />
+      )}
 
       {/* Change Password trigger */}
       <div className="card max-w-md p-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="p-2.5 bg-slate-100 rounded-lg">
-            <Lock className="w-5 h-5 text-slate-600"/>
+            <Lock className="w-5 h-5 text-slate-600" />
           </div>
           <div>
             <p className="font-medium text-slate-900">Password</p>
             <p className="text-sm text-slate-500">Update your account</p>
           </div>
         </div>
-        <button onClick={()=>setShowPasswordModal(true)} className="btn-secondary text-sm">
+        <button
+          onClick={() => setShowPasswordModal(true)}
+          className="btn-secondary text-sm"
+        >
           Change
         </button>
       </div>
-      <ChangePasswordModal open={showPasswordModal} onClose={()=>setShowPasswordModal(false)}/>
+      <ChangePasswordModal
+        open={showPasswordModal}
+        onClose={() => setShowPasswordModal(false)}
+      />
     </div>
   );
 };
