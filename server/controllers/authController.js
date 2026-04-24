@@ -12,7 +12,7 @@ export const login = async (req, res) => {
       return res.status(400).json({ error: "Email and password are required" });
     }
 
-    const user = User.findOne({ email });
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ error: "Invalid credentials" });
     }
@@ -25,7 +25,7 @@ export const login = async (req, res) => {
       return res.status(401).json({ error: "Not authorized as employee" });
     }
 
-    const isValid = await bcrypt.compare(password, User.password);
+    const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {
       return res.status(401).json({ error: "Invalid credentials" });
     }

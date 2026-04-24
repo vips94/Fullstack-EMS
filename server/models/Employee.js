@@ -4,7 +4,7 @@ import { DEPARTMENTS } from "../constants/departments";
 const employeeSchema = new mongoose.Schema(
   {
     userId: {
-      type: mongoose.Schema.type.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
       unique: true,

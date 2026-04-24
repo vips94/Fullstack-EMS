@@ -1,5 +1,5 @@
 import Employee from "../models/Employee";
-import { bcrypt } from "bcrypt";
+import bcrypt from "bcrypt";
 import User from "../models/User";
 
 // GEt employees
@@ -56,7 +56,7 @@ export const createEmployee = async (req, res) => {
     const user = await User.create({
       email,
       password: hashed,
-      role: role || "Employee",
+      role: role || "EMPLOYEE",
     });
 
     const employee = await Employee.create({
@@ -106,6 +106,10 @@ export const updateEmployee = async (req, res) => {
     } = req.body;
 
     const employee = await Employee.findById(id);
+
+    if (!employee) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
 
     await Employee.findByIdAndUpdate(id, {
       firstName,
