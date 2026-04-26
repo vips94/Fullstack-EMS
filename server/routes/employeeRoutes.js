@@ -4,8 +4,8 @@ import {
   deleteEmployee,
   getEmployees,
   updateEmployee,
-} from "../controllers/employeeController";
-import { portectAdmin, protect } from "../middleware/auth";
+} from "../controllers/employeeController.js";
+import { portectAdmin, protect } from "../middleware/auth.js";
 
 const employeesRouter = Router();
 
