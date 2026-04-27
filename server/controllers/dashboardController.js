@@ -5,7 +5,7 @@ import { DEPARTMENTS } from "../constants/departments.js";
 import Payslip from "../models/Payslip.js";
 
 //Get dashboard for employee and admin
-//GET /api/dashbaord
+//GET /api/dashboard
 
 export const getDashboard = async (req, res) => {
   try {

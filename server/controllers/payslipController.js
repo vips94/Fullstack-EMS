@@ -15,6 +15,7 @@ export const createPayslip = async (req, res) => {
     const netSalary =
       Number(basicSalary) + Number(allowances || 0) - Number(deductions || 0);
 
+    const session = req.session;
     const employee = await Employee.findOne({ userId: session.userId });
     if (!employee) {
       return res.status(404).json({ error: "Employee not found" });
