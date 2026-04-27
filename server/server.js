@@ -7,6 +7,8 @@ import authRouter from "./routes/authRoutes.js";
 import employeesRouter from "./routes/employeeRoutes.js";
 import profileRouter from "./routes/profileRoute.js";
 import attendanceRoute from "./routes/attendanceRoute.js";
+import leaveRoutes from "./routes/leaveRoutes.js";
+import payslipRouter from "./routes/payslipRoutes.js";
 
 const app = express(); //create instance of express
 const PORT = process.env.PORT || 4000;
@@ -22,6 +24,8 @@ app.use("/api/auth", authRouter);
 app.use("/api/employees", employeesRouter);
 app.use("/api/profile", profileRouter);
 app.use("/api/attendance", attendanceRoute);
+app.use("/api/leave", leaveRoutes);
+app.use("/api/payslips", payslipRouter); 
 
 // start the server
 const startServer = async () => {
