@@ -6,7 +6,6 @@ const payslipSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Employee",
       required: true,
-      unique: true,
     },
     month: { type: Number, required: true },
     year: { type: Number, required: true },
@@ -19,6 +18,6 @@ const payslipSchema = new mongoose.Schema(
 );
 
 const Payslip =
-  mongoose.model.Payslip || mongoose.model("Payslip", payslipSchema);
+  mongoose.models.Payslip || mongoose.model("Payslip", payslipSchema);
 
 export default Payslip;

@@ -14,7 +14,7 @@ export const createLeave = async (req, res) => {
     }
     if (employee.isDeleted) {
       return res.status(403).json({
-        error: "Your account is deactivated. You cannot apploy for leave.",
+        error: "Your account is deactivated. You cannot apply for leave.",
       });
     }
 
@@ -35,7 +35,7 @@ export const createLeave = async (req, res) => {
     if (new Date(endDate) < new Date(startDate)) {
       return res
         .status(400)
-        .json({ error: "End Date cannot be bofore start Date" });
+        .json({ error: "End Date cannot be before start Date" });
     }
 
     const leave = await LeaveApplication.create({
@@ -76,7 +76,7 @@ export const getLeaves = async (req, res) => {
           employeeId: obj.employeeId?._id?.toString(),
         };
       });
-      return res.json({data});
+      return res.json({ data });
     } else {
       const employee = await Employee.findOne({ userId: session.userId });
       if (!employee) {
@@ -112,8 +112,8 @@ export const updateLeaveStatus = async (req, res) => {
     if (!leave) {
       return res.status(404).json({ error: "Leave not found" });
     }
-    return res.json({ suceess: true, data: leave });
+    return res.json({ success: true, data: leave });
   } catch (error) {
-    return res.status(403).json({ error: "Operation failed." });
+    return res.status(500).json({ error: "Operation failed." });
   }
 };

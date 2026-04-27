@@ -23,7 +23,7 @@ export const createPayslip = async (req, res) => {
       deductions: Number(deductions || 0),
       netSalary,
     });
-    return res.json({ success: true, data:payslip });
+    return res.json({ success: true, data: payslip });
   } catch (error) {
     return res.status(500).json({ error: "Failed" });
   }
@@ -36,8 +36,7 @@ export const getPayslips = async (req, res) => {
     const session = req.session;
     const isAdmin = session.role === "ADMIN";
     if (isAdmin) {
-      const payslips = await payslip
-        .find()
+      const payslips = await Payslip.find()
         .populate("employeeId")
         .sort({ createdAt: -1 });
       const data = payslips.map((p) => {
@@ -51,14 +50,14 @@ export const getPayslips = async (req, res) => {
       });
       return res.json({ data });
     } else {
-      const employee = Employee.findOne({ userId: session.userId });
+      const employee = await Employee.findOne({ userId: session.userId });
       if (!employee) {
         return res.status(404).json({ error: "Employee not found" });
       }
-      const payslips = await Payslips.find({ employeeId: employee._id }).sort({
+      const payslips = await Payslip.find({ employeeId: employee._id }).sort({
         createdAt: -1,
       });
-      return res.json({success: true , data: payslips});
+      return res.json({ success: true, data: payslips });
     }
   } catch (error) {
     return res.status(500).json({ error: "Failed" });
@@ -69,14 +68,27 @@ export const getPayslips = async (req, res) => {
 // GET /api/payslips/:id
 export const getPayslipById = async (req, res) => {
   try {
-    const payslip = await Payslip.findById(req.params.id).populate("employeeId").lean();
-    if(!payslip) return res.status(404).json({error: "Not found"});
-    const result = {
-        ...payslip,
-        id: payslip._id.toString(),
-        employee: payslip.employeeId,
+    const payslip = await Payslip.findById(req.params.id)
+      .populate("employeeId")
+      .lean();
+    if (!payslip) return res.status(404).json({ error: "Not found" });
+
+    const session = req.session;
+    if (session.role !== "ADMIN") {
+      const employee = await Employee.findOne({ userId: session.userId });
+      if (
+        !employee ||
+        payslip.employeeId._id.toString() !== employee._id.toString()
+      ) {
+        return res.status(403).json({ error: "Access denied" });
+      }
     }
-    return res.josn({data:result});
+    const result = {
+      ...payslip,
+      id: payslip._id.toString(),
+      employee: payslip.employeeId,
+    };
+    return res.json({ data: result });
   } catch (error) {
     return res.status(500).json({ error: "Failed" });
   }
