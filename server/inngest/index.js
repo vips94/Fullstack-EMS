@@ -88,7 +88,7 @@ const leaveApplicationReminder = inngest.createFunction(
                 <br />
                 <p style="font-size: 16px;">Best Regards,</p>
                 <p style="font-size: 16px;">EMS</p>
-            </div>`,
+            </div>` ,
       });
     }
   },
