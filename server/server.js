@@ -10,6 +10,8 @@ import attendanceRoute from "./routes/attendanceRoute.js";
 import leaveRoutes from "./routes/leaveRoutes.js";
 import payslipRouter from "./routes/payslipRoutes.js";
 import dashboardRouter from "./routes/dashboardRoute.js";
+import { serve } from "inngest/express";
+import { inngest, functions } from "./inngest/index.js";
 
 const app = express(); //create instance of express
 const PORT = process.env.PORT || 4000;
@@ -28,6 +30,7 @@ app.use("/api/attendance", attendanceRoute);
 app.use("/api/leave", leaveRoutes);
 app.use("/api/payslips", payslipRouter);
 app.use("/api/dashboard", dashboardRouter);
+app.use("/api/inngest", serve({ client: inngest, functions }));
 
 // start the server
 const startServer = async () => {
