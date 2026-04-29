@@ -1,5 +1,5 @@
 import { Inngest } from "inngest";
-import Attendance from "../models/Attendance.js ";
+import Attendance from "../models/Attendance.js";
 import Employee from "../models/Employee.js";
 import LeaveApplication from "../models/LeaveApplication.js";
 import sendEmail from "../config/nodeemailer.js";
@@ -16,7 +16,7 @@ const autoCheckout = inngest.createFunction(
     //wait for 9 hours
     await step.sleepUntil(
       "wait-for-9-hours",
-      new Date(new Date().getTime + 9 * 60 * 60 * 1000),
+      new Date(new Date().getTime() + 9 * 60 * 60 * 1000),
     );
 
     //get attendance data
@@ -48,8 +48,7 @@ const autoCheckout = inngest.createFunction(
       );
       attendance = await Attendance.findById(attendanceId);
       if (!attendance?.checkOut) {
-        attendance.checkOut =
-          new Date(attendance.checkIn).getTime() + 4 * 60 * 60 * 1000;
+        attendance.checkOut = new Date(new Date(attendance.checkIn).getTime() + 4 * 60 * 60 * 1000);
         attendance.workingHours = 4;
         attendance.dayType = "Half Day";
         attendance.status = "LATE";
@@ -140,7 +139,7 @@ const attendanceReminderCron = inngest.createFunction(
     //Step 4: GET employee IDs who already checked in today
     const checkedInIds = await step.run("get-checked-in-ids", async () => {
       const attendance = await Attendance.find({
-        date: { $gte: new Date(today.endUTC), $lt: new Date(today.endUTC) },
+        date: { $gte: new Date(today.startUTC), $lt: new Date(today.endUTC) },
       }).lean();
 
       return attendance.map((a) => a.employeeId.toString());
@@ -177,7 +176,7 @@ const attendanceReminderCron = inngest.createFunction(
 
     return {
       totalActive: activeEmployee.length,
-      onLeave: onLeave.length,
+      onLeave: onLeaveIds.length,
       checkedIn: checkedInIds.length,
       absent: absentEmployees.length,
     };
