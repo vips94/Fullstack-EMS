@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { dummyPayslipData } from "../assets/assets";
 import Loading from "../components/Loading";
 import { format } from "date-fns";
+import api from "../api/axios";
 
 const PrintPayslip = () => {
   const { id } = useParams();
@@ -10,11 +10,17 @@ const PrintPayslip = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setPayslip(dummyPayslipData.find((slip) => slip._id === id));
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+    api
+      .get(`/payslips/${id}`)
+      .then((res) => setPayslip(res.data.data))
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, [id]);
+
+  console.log(payslip);
+  console.log("year:", payslip?.year);
+  console.log("month:", payslip?.month);
+  console.log("date:", new Date(payslip?.year, payslip?.month - 1));
 
   if (loading) return <Loading />;
   if (!payslip)
@@ -29,7 +35,7 @@ const PrintPayslip = () => {
           PAYSLIP
         </h1>
         <p className="text-slate-500 text-sm mt-1">
-          {format(new Date(payslip.year, payslip.month - 1), "MMMM yyyy")}
+          {format(new Date(payslip?.year, payslip?.month - 1), "MMMM yyyy")}
         </p>
       </div>
       <div className="grid grid-cols-2 gap-6 mb-8">

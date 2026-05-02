@@ -1,6 +1,7 @@
 import Employee from "../models/Employee.js";
 import bcrypt from "bcrypt";
 import User from "../models/User.js";
+import mongoose from "mongoose";
 
 // GEt employees
 // GET /api/employees
@@ -31,56 +32,105 @@ export const getEmployees = async (req, res) => {
 // Create employee
 // POST /api/employees
 export const createEmployee = async (req, res) => {
+  let session;
+
   try {
-    const {
-      firstName,
-      lastName,
-      email,
-      phone,
-      position,
-      basicSalary,
-      allowances,
-      deductions,
-      joinDate,
-      role,
-      bio,
-      department,
-      password,
-    } = req.body;
+    // 🔹 Start session
+    session = await mongoose.startSession();
 
-    if (!email || !password || !firstName || !lastName) {
-      return res.status(400).json({ error: "Missing required fields" });
-    }
+    // 🔹 Wrap everything in a transaction
+    let createdEmployee;
 
-    const hashed = await bcrypt.hash(password, 10);
-    const user = await User.create({
-      email,
-      password: hashed,
-      role: role || "EMPLOYEE",
+    await session.withTransaction(async () => {
+      const {
+        firstName,
+        lastName,
+        email,
+        phone,
+        position,
+        basicSalary,
+        allowances,
+        deductions,
+        joinDate,
+        role,
+        bio,
+        department,
+        password,
+      } = req.body;
+
+      // 🔹 Validation
+      if (!email || !password || !firstName || !lastName) {
+        throw new Error("Missing required fields");
+      }
+
+      // 🔹 Hash password
+      const hashed = await bcrypt.hash(password, 10);
+
+      // 🔹 Create User
+      const user = await User.create(
+        [
+          {
+            email,
+            password: hashed,
+            role: role || "EMPLOYEE",
+          },
+        ],
+        { session },
+      );
+
+      // 🔹 Create Employee linked to User
+      const employee = await Employee.create(
+        [
+          {
+            userId: user[0]._id,
+            firstName,
+            lastName,
+            email,
+            phone,
+            position,
+            department: department || "Engineering",
+            basicSalary: Number(basicSalary) || 0,
+            allowances: Number(allowances) || 0,
+            deductions: Number(deductions) || 0,
+            joinDate: new Date(joinDate),
+            bio: bio || "",
+          },
+        ],
+        { session },
+      );
+
+      // 🔹 Store for response outside transaction
+      createdEmployee = employee[0];
     });
 
-    const employee = await Employee.create({
-      userId: user._id,
-      firstName,
-      lastName,
-      email,
-      phone,
-      position,
-      department: department || "Engineering",
-      basicSalary: Number(basicSalary) || 0,
-      allowances: Number(allowances) || 0,
-      deductions: Number(deductions) || 0,
-      joinDate: new Date(joinDate),
-      bio: bio || "",
+    // 🔹 Success response
+    return res.status(201).json({
+      success: true,
+      employee: createdEmployee,
     });
-
-    return res.status(201).json({ success: true, employee });
   } catch (error) {
+    // 🔴 Handle duplicate key (email unique)
     if (error.code === 11000) {
-      return res.status(400).json({ error: "Email already exists" });
+      return res.status(400).json({
+        error: "Email already exists",
+      });
     }
+
+    // 🔴 Handle validation error thrown manually
+    if (error.message === "Missing required fields") {
+      return res.status(400).json({
+        error: error.message,
+      });
+    }
+
     console.error("Create employee error:", error);
-    return res.status(500).json({ error: "Failed to create employee" });
+
+    return res.status(500).json({
+      error: "Failed to create employee",
+    });
+  } finally {
+    // 🔹 Always cleanup session
+    if (session) session.endSession();
   }
 };
 

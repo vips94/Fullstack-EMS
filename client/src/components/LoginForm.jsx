@@ -1,12 +1,9 @@
-import {
-  ArrowLeftIcon,
-  EyeOffIcon,
-  EyeIcon,
-  Loader2Icon,
-} from "lucide-react";
+import { ArrowLeftIcon, EyeOffIcon, EyeIcon, Loader2Icon } from "lucide-react";
 import LoginLeftSide from "./LoginLeftSide";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
 const LoginForm = ({ role, title, subtitle }) => {
   const [email, setEmail] = useState("");
@@ -14,9 +11,23 @@ const LoginForm = ({ role, title, subtitle }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
+    try {
+      await login(email, password, role);
+      navigate("/dashboard");
+    } catch (error) {
+      toast.error(
+        error.response?.data?.error || error.message || "Login failed",
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -49,7 +60,10 @@ const LoginForm = ({ role, title, subtitle }) => {
 
           <form className="space-y-5" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-slate-700 mb-2"
+              >
                 Email Address
               </label>
               <input
@@ -62,7 +76,10 @@ const LoginForm = ({ role, title, subtitle }) => {
               />
             </div>
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-2">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-slate-700 mb-2"
+              >
                 Password
               </label>
               <div className="relative">

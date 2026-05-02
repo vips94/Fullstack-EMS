@@ -48,7 +48,9 @@ const autoCheckout = inngest.createFunction(
       );
       attendance = await Attendance.findById(attendanceId);
       if (!attendance?.checkOut) {
-        attendance.checkOut = new Date(new Date(attendance.checkIn).getTime() + 4 * 60 * 60 * 1000);
+        attendance.checkOut = new Date(
+          new Date(attendance.checkIn).getTime() + 4 * 60 * 60 * 1000,
+        );
         attendance.workingHours = 4;
         attendance.dayType = "Half Day";
         attendance.status = "LATE";
@@ -88,7 +90,7 @@ const leaveApplicationReminder = inngest.createFunction(
                 <br />
                 <p style="font-size: 16px;">Best Regards,</p>
                 <p style="font-size: 16px;">EMS</p>
-            </div>` ,
+            </div>`,
       });
     }
   },
@@ -96,7 +98,10 @@ const leaveApplicationReminder = inngest.createFunction(
 
 // Cron: Check attendance at 11:30 AM IST (06:00 UTC) and email absent employee
 const attendanceReminderCron = inngest.createFunction(
-  { id: "attendance-reminder-cron", triggers: [{ cron: "TZ=Asia/Kolkata 30 11 * * *" }] },
+  {
+    id: "attendance-reminder-cron",
+    triggers: [{ cron: "TZ=Asia/Kolkata 30 11 * * *" }],
+  },
   // 06:00 UTC = 11:30 AM IST
   async ({ event, step }) => {
     // Step 1: Get today's date range(IST)
@@ -171,6 +176,8 @@ const attendanceReminderCron = inngest.createFunction(
                     </div>`,
           });
         });
+        await Promise.all(emailPromise);
+        return { emailSent: absentEmployees.length };
       });
     }
 
