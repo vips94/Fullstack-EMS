@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { DEPARTMENTS } from "../assets/assets";
 import { Loader2Icon } from "lucide-react";
+import api from "../api/axios";
+import toast from "react-hot-toast";
 
 const EmployeeForm = ({ initialData, onSuccess, onCancel }) => {
   const navigate = useNavigate();
@@ -10,6 +12,23 @@ const EmployeeForm = ({ initialData, onSuccess, onCancel }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    const formData = new FormData(e.currentTarget);
+    if (isEditMode) {
+      const pwd = formData.get("password");
+      if (!pwd) formData.delete("password");
+    }
+
+    try {
+      const url = isEditMode ? `/employees/${initialData.id}` : "/employees";
+      const method = isEditMode ? "put" : "post";
+      await api[method](url, formData);
+      onSuccess ? onSuccess() : navigate("/employee");
+    } catch (err) {
+      toast.error(err.response?.data?.error || err?.message);
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <form
@@ -56,13 +75,13 @@ const EmployeeForm = ({ initialData, onSuccess, onCancel }) => {
             />
           </div>
           <div>
-            <label className="block mb-2" htmlFor="date">
+            <label className="block mb-2" htmlFor="joinDate">
               Joining Date
             </label>
             <input
               type="date"
-              id="date"
-              name="date"
+              id="joinDate"
+              name="joinDate"
               required
               defaultValue={
                 initialData?.joinDate
@@ -202,15 +221,10 @@ const EmployeeForm = ({ initialData, onSuccess, onCancel }) => {
           </div>
           {!isEditMode && (
             <div>
-              <label className="block mb-2" htmlFor="temporaryPassword">
+              <label className="block mb-2" htmlFor="password">
                 Temporary Password
               </label>
-              <input
-                type="password"
-                id="temporaryPassword"
-                name="temporaryPassword"
-                required
-              />
+              <input type="password" id="password" name="password" required />
             </div>
           )}
           {isEditMode && (
@@ -227,12 +241,12 @@ const EmployeeForm = ({ initialData, onSuccess, onCancel }) => {
             </div>
           )}
           <div>
-            <label className="block mb-2" htmlFor="systemRole">
+            <label className="block mb-2" htmlFor="role">
               System Role
             </label>
             <select
-              id="systemRole"
-              name="systemRole"
+              id="role"
+              name="role"
               defaultValue={initialData?.user?.role || "EMPLOYEE"}
             >
               <option value="EMPLOYEE">Employee</option>
