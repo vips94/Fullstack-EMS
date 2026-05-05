@@ -1,3 +1,7 @@
+/**
+ * LoginLeftSide - Left sidebar component for login pages (desktop view)
+ * Displays company branding and information about the EMS system
+ */
 const LoginLeftSide = () => {
   return (
     <div className="hidden md:flex w-1/2 bg-indigo-950 relative overflow-hidden border-r border-slate-200">

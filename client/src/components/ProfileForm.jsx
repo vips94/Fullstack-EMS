@@ -2,11 +2,19 @@ import { Loader2, Save, User } from "lucide-react";
 import { useState } from "react";
 import api from "../api/axios";
 
+/**
+ * ProfileForm - Form component for users to update their public profile information
+ * Allows editing bio while showing read-only personal details
+ */
 const ProfileForm = ({ initialData, onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
+  /**
+   * handleSubmit - Submits profile updates to the API
+   * Shows success or error message based on response
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);

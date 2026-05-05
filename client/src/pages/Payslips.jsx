@@ -7,6 +7,11 @@ import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 import api from "../api/axios";
 
+/**
+ * Payslips - Payslip management page for employees and admins
+ * Employees: view their payslip history
+ * Admins: generate payslips for employees and view all payslips
+ */
 const Payslips = () => {
   const [payslips, setPayslips] = useState([]);
   const [employees, setEmployees] = useState([]);
@@ -14,6 +19,9 @@ const Payslips = () => {
   const { user } = useAuth();
   const isAdmin = user?.role === "ADMIN";
 
+  /**
+   * fetchPayslips - Fetches payslips from API
+   */
   const fetchPayslips = useCallback(async () => {
     try {
       const res = await api.get("/payslips");

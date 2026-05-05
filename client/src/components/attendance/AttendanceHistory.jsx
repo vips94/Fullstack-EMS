@@ -1,6 +1,10 @@
 import { getDayTypeDisplay, getWorkingHoursDisplay } from "../../assets/assets";
 import { format } from "date-fns";
 
+/**
+ * AttendanceHistory - Displays table of user's attendance records
+ * Shows check-in/out times, working hours, day type, and status for each day
+ */
 const AttendanceHistory = ({ history }) => {
   return (
     <div className="card overflow-hidden">

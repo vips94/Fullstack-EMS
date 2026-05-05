@@ -7,11 +7,18 @@ import AttendanceHistory from "../components/attendance/AttendanceHistory";
 import toast from "react-hot-toast";
 import api from "../api/axios";
 
+/**
+ * Attendance - Page for employees to manage their attendance
+ * Shows attendance stats, history, and provides check-in/check-out functionality
+ */
 const Attendance = () => {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isDeleted, setIsDeleted] = useState(false);
 
+  /**
+   * fetchData - Fetches user's attendance records from API
+   */
   const fetchData = useCallback(async () => {
     try {
       const res = await api.get("/attendance");

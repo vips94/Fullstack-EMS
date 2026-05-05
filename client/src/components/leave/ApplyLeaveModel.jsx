@@ -3,6 +3,10 @@ import { CalendarDays, FileText, Loader2, Send, X } from "lucide-react";
 import api from "../../api/axios";
 import toast from "react-hot-toast";
 
+/**
+ * ApplyLeaveModel - Modal component for employees to apply for leave
+ * Collects leave type, dates, and reason for leave request
+ */
 const ApplyLeaveModel = ({ open, onClose, onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const today = new Date();
@@ -11,6 +15,10 @@ const ApplyLeaveModel = ({ open, onClose, onSuccess }) => {
 
   const minDate = tomorrow.toISOString().split("T")[0];
 
+  /**
+   * handleSubmit - Submits leave application request to API
+   * Validates form data and shows success/error messages
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);

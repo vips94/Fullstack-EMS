@@ -3,9 +3,17 @@ import { LogInIcon, LogOutIcon, Loader2Icon } from "lucide-react";
 import toast from "react-hot-toast";
 import api from "../../api/axios";
 
+/**
+ * CheckInButton - Check-in/Check-out button component for attendance
+ * Allows employees to clock in at start of day and clock out at end
+ */
 const CheckInButton = ({ todayRecord, onAction }) => {
   const [loading, setLoading] = useState(false);
 
+  /**
+   * handleAttendance - Toggles check-in/check-out status for user
+   * Calls API to record attendance action and triggers refresh
+   */
   const handleAttendance = async () => {
     setLoading(true);
     try {

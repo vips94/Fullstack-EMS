@@ -5,6 +5,11 @@ import EmployeeCard from "../components/EmployeeCard";
 import EmployeeForm from "../components/EmployeeForm";
 import api from "../api/axios";
 
+/**
+ * Employees - Admin page to manage employee records
+ * Displays employee cards in grid, supports search, filter by department,
+ * and create/edit/delete employee operations
+ */
 const Employees = () => {
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,6 +18,9 @@ const Employees = () => {
   const [editEmployee, setEditEmployee] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
+  /**
+   * fetchEmployees - Fetches employees list, with optional department filter
+   */
   const fetchEmployees = useCallback(async () => {
     try {
       const url = selectedDept

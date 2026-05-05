@@ -8,12 +8,19 @@ import { useAuth } from "../context/AuthContext";
 import api from "../api/axios";
 import toast from "react-hot-toast";
 
+/**
+ * Settings - User settings and account management page
+ * Allows users to update profile information and change password
+ */
 const Settings = () => {
   const { user } = useAuth();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
 
+  /**
+   * fetchProfile - Fetches user profile data from API
+   */
   const fetchProfile = async () => {
     try {
       const res = await api.get("/profile");

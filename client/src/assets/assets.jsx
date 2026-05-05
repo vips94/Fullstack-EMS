@@ -291,6 +291,10 @@ export const dummyAttendanceData = [
 
 
 export function getWorkingHoursDisplay(record) {
+    /**
+     * getWorkingHoursDisplay - Formats and displays working hours duration
+     * Shows stored working hours or calculates live hours if still checked in
+     */
     if (record.workingHours != null) {
         const hrs = Math.floor(record.workingHours);
         const mins = Math.round((record.workingHours - hrs) * 60);
@@ -308,6 +312,10 @@ export function getWorkingHoursDisplay(record) {
 }
 
 export function getDayTypeDisplay(record) {
+    /**
+     * getDayTypeDisplay - Returns formatted day type label and styling class
+     * Determines day type (Full Day, Half Day, etc.) or shows status if still checked in
+     */
     if (record.dayType) {
         const map = {
             "Full Day": "badge-success",

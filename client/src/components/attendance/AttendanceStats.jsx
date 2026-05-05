@@ -1,5 +1,9 @@
 import { AlertCircleIcon, CalendarIcon, ClockIcon } from "lucide-react";
 
+/**
+ * AttendanceStats - Displays attendance statistics summary cards
+ * Shows days present, late arrivals, and average working hours
+ */
 const AttendanceStats = ({ history }) => {
   const totalPresent = history.filter(
     (h) => (h.status === "PRESENT") | (h.status === "LATE"),

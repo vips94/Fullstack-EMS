@@ -5,6 +5,10 @@ import {
   FileTextIcon,
 } from "lucide-react";
 
+/**
+ * AdminDashboard - Displays admin dashboard with key organization statistics
+ * Shows total employees, departments, today's attendance, and pending leaves
+ */
 const AdminDashboard = ({ data }) => {
   const stats = [
     {

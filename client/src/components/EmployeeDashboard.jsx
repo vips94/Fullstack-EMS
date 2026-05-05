@@ -6,6 +6,10 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
+/**
+ * EmployeeDashboard - Displays employee dashboard with personal statistics
+ * Shows attendance count, pending leaves, and latest payslip information
+ */
 const EmployeeDashboard = ({ data }) => {
   const emp = data.employee;
 

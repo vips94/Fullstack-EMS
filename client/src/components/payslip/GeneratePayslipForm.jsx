@@ -3,6 +3,10 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import api from "../../api/axios";
 
+/**
+ * GeneratePayslipForm - Modal form for admin to generate employee payslips
+ * Collects employee, month, salary details to create payslip records
+ */
 const GeneratePayslipForm = ({ employees, onSuccess }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -17,6 +21,10 @@ const GeneratePayslipForm = ({ employees, onSuccess }) => {
       </button>
     );
 
+  /**
+   * handleSubmit - Submits payslip generation request to API
+   * Creates payslip record for selected employee and month
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);

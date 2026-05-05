@@ -11,6 +11,10 @@ import Attendance from "./pages/Attendance";
 import Employees from "./pages/Employees";
 import LoginForm from "./components/LoginForm";
 
+/**
+ * App - Main application component that defines all routes for the EMS application
+ * Handles navigation between login pages, employee/admin dashboards, and protected routes
+ */
 const App = () => {
   return (
     <>

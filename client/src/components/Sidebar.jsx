@@ -16,6 +16,11 @@ import {
 import { useAuth } from "../context/AuthContext";
 import api from "../api/axios";
 
+/**
+ * Sidebar - Navigation sidebar component for authenticated users
+ * Shows different menu items based on user role (admin vs employee)
+ * Includes user profile card and logout button
+ */
 const Sidebar = () => {
   const { pathname } = useLocation();
   const [userName, setUserName] = useState("");
@@ -46,6 +51,9 @@ const Sidebar = () => {
     { name: "Settings", href: "/settings", icon: SettingsIcon },
   ];
 
+  /**
+   * handleLogout - Logs out user and redirects to login page
+   */
   const handleLogout = () => {
     logout();
     window.location.href = "/login";

@@ -2,7 +2,15 @@ import { PencilIcon, Trash2Icon } from "lucide-react";
 import toast from "react-hot-toast";
 import api from "../api/axios";
 
+/**
+ * EmployeeCard - Displays individual employee profile card with edit and delete options
+ * Shows employee name, department, and position with action buttons on hover
+ */
 const EmployeeCard = ({ employee, onDelete, onEdit }) => {
+  /**
+   * handleDelete - Deletes employee record after confirmation
+   * Calls onDelete callback and shows error toast on failure
+   */
   const handleDelete = async () => {
     if (!confirm("Are you sure you want to delete this employee?")) return;
 

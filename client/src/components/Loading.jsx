@@ -1,3 +1,7 @@
+/**
+ * Loading - Simple loading spinner component
+ * Displays centered animated spinner during data loading
+ */
 const Loading = () => {
   return (
     <div className="flex justify-center h-dvh items-center">

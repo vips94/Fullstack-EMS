@@ -2,10 +2,18 @@ import { Loader2, LockIcon, X } from "lucide-react";
 import { useState } from "react";
 import api from "../api/axios";
 
+/**
+ * ChangePasswordModal - Modal component for changing user password
+ * Validates current password and updates to new password
+ */
 const ChangePasswordModal = ({ open, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
 
+  /**
+   * handleSubmit - Submits password change request to API
+   * Validates current password before updating to new password
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);

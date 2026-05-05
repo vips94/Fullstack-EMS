@@ -4,9 +4,17 @@ import { format } from "date-fns";
 import toast from "react-hot-toast";
 import api from "../../api/axios";
 
+/**
+ * LeaveHistory - Displays leave applications history in table format
+ * Admin can approve/reject pending leave requests; employees view their leave history
+ */
 const LeaveHistory = ({ leaves, isAdmin, onUpdate }) => {
   const [processing, setProcessing] = useState(null);
 
+  /**
+   * handleStatusUpdate - Updates leave request status (approved/rejected)
+   * Only available for admin users and pending requests
+   */
   const handleStatusUpdate = async (id, status) => {
     setProcessing(id);
     try {

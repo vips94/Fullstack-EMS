@@ -2,6 +2,12 @@ import { Navigate, Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import { useAuth } from "../context/AuthContext";
 import Loading from "../components/Loading";
+
+/**
+ * Layout - Main layout wrapper for authenticated pages
+ * Provides sidebar navigation and content area for all protected routes
+ * Redirects to login if user is not authenticated
+ */
 const Layout = () => {
   const { user, loading } = useAuth();
   if (loading) return <Loading />;

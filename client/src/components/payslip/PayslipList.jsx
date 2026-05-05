@@ -1,6 +1,10 @@
 import { format } from "date-fns";
 import { Download } from "lucide-react";
 
+/**
+ * PayslipList - Displays table of payslips for user or employees (admin view)
+ * Shows payslip period, basic salary, net salary, and download button
+ */
 const PayslipList = ({ payslips, isAdmin }) => {
   return (
     <div className="card overflow-hidden">

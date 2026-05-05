@@ -13,6 +13,11 @@ import { useAuth } from "../context/AuthContext";
 import api from "../api/axios";
 import toast from "react-hot-toast";
 
+/**
+ * Leave - Leave management page for employees and admins
+ * Employees: view leave history and apply for leave
+ * Admins: view all leave requests and approve/reject them
+ */
 const Leave = () => {
   const { user } = useAuth();
   const [leaves, setLeaves] = useState([]);
@@ -21,6 +26,9 @@ const Leave = () => {
   const [isDeleted, setIsDeleted] = useState(false);
   const isAdmin = user?.role === "ADMIN";
 
+  /**
+   * fetchLeaves - Fetches leave applications from API
+   */
   const fetchLeaves = useCallback(async () => {
     try {
       const res = await api.get("/leave");

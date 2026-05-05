@@ -4,11 +4,18 @@ import Loading from "../components/Loading";
 import { format } from "date-fns";
 import api from "../api/axios";
 
+/**
+ * PrintPayslip - Page to display and print payslip details
+ * Fetches payslip data by ID and displays formatted payslip document
+ */
 const PrintPayslip = () => {
   const { id } = useParams();
   const [payslip, setPayslip] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  /**
+   * Fetches payslip data on component mount
+   */
   useEffect(() => {
     api
       .get(`/payslips/${id}`)

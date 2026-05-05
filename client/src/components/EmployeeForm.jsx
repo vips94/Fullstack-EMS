@@ -5,11 +5,20 @@ import { Loader2Icon } from "lucide-react";
 import api from "../api/axios";
 import toast from "react-hot-toast";
 
+/**
+ * EmployeeForm - Form component for creating or editing employee records
+ * Collects personal information, employment details, and account setup
+ * Supports both create and edit modes based on initialData
+ */
 const EmployeeForm = ({ initialData, onSuccess, onCancel }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const isEditMode = !!initialData;
 
+  /**
+   * handleSubmit - Submits employee form data for creation or update
+   * Handles password field conditionally based on edit/create mode
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);

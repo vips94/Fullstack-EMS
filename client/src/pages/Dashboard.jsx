@@ -5,10 +5,18 @@ import AdminDashboard from "../components/Admin-dashboard";
 import api from "../api/axios";
 import toast from "react-hot-toast";
 
+/**
+ * Dashboard - Main dashboard page that displays role-specific content
+ * Shows admin dashboard for admins and employee dashboard for employees
+ */
 const Dashboard = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  /**
+   * Fetches dashboard data on component mount
+   * Shows appropriate dashboard based on user role
+   */
   useEffect(() => {
     api
       .get("/dashboard")

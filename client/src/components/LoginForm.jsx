@@ -5,6 +5,10 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 
+/**
+ * LoginForm - Login form component for both admin and employee portals
+ * Handles email/password authentication with role-based login
+ */
 const LoginForm = ({ role, title, subtitle }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,6 +18,10 @@ const LoginForm = ({ role, title, subtitle }) => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
+  /**
+   * handleSubmit - Authenticates user and redirects to dashboard
+   * Shows error toast on authentication failure
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
