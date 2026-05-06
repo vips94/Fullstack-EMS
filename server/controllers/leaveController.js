@@ -170,8 +170,42 @@ export const updateLeaveStatus = async (req, res) => {
       return res.status(400).json({ error: "Invalid status" });
     }
     
-    // findByIdAndUpdate(id, update, options)
-    // { returnDocument: "after" } returns updated document
+    // findByIdAndUpdate(id, updateObject, options)
+    // Updates MongoDB document and returns result based on returnDocument option
+    //
+    // IMPORTANT: returnDocument option behavior:
+    // ========================================
+    // 
+    // "after" (USED HERE):
+    // - Returns the UPDATED document (new state)
+    // - Shows the document AFTER the update was applied
+    // - Used when you need to show user the latest data
+    //
+    // "before" (ALTERNATIVE):
+    // - Returns the ORIGINAL document (old state)
+    // - Shows the document BEFORE the update was applied
+    // - Used when you need to audit or log old values
+    //
+    // REAL EXAMPLE:
+    // ============
+    // Database state BEFORE:
+    // { _id: "123", status: "PENDING", startDate: "2026-05-10", reason: "Sick" }
+    //
+    // Request body: { status: "APPROVED" }
+    //
+    // With returnDocument: "after":
+    // Returns: { _id: "123", status: "APPROVED", startDate: "2026-05-10", reason: "Sick" }
+    //          ↑ Status changed to APPROVED
+    //
+    // With returnDocument: "before":
+    // Returns: { _id: "123", status: "PENDING", startDate: "2026-05-10", reason: "Sick" }
+    //          ↑ Still shows old PENDING status
+    //
+    // Code flow:
+    // 1. MongoDB finds leave by ID
+    // 2. Updates status field with new value
+    // 3. Retrieves and returns the updated document
+    // 4. Response sent to client with new data
     const leave = await LeaveApplication.findByIdAndUpdate(
       req.params.id,
       { status },
