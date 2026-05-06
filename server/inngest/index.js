@@ -263,45 +263,6 @@ const attendanceReminderCron = inngest.createFunction(
     // Step 6: Send reminder emails to absent employees
     if (absentEmployees.length > 0) {
       await step.run("send-reminder-emails", async () => {
-        // ⚠️ IMPORTANT: Promise.all() BEHAVIOR
-        // ===================================
-        // Promise.all() FAILS FAST if ANY promise is rejected
-        // If 1 email fails → ALL emails stop → Rest won't send
-        //
-        // SCENARIO:
-        // - 5 absent employees need emails
-        // - Employee 1: ✅ Email sent
-        // - Employee 2: ✅ Email sent
-        // - Employee 3: ❌ Email FAILS (invalid email, SMTP error, etc)
-        // - Promise.all() IMMEDIATELY throws error
-        // - Employees 4 & 5: ❌ NEVER get email (promise.all stopped)
-        //
-        // SOLUTION: Use Promise.allSettled() instead
-        // - Waits for ALL promises (success OR failure)
-        // - Doesn't throw on individual failures
-        // - Returns result of each promise
-        //
-        // COMPARISON TABLE:
-        // ==================
-        // Promise.all():
-        //   Pros: Fast, simple syntax
-        //   Cons: ❌ Stops on first failure, all-or-nothing
-        //   Use: When ALL must succeed (transactions, validations)
-        //
-        // Promise.allSettled():
-        //   Pros: ✅ Sends all emails even if some fail
-        //   Cons: More complex to handle failures
-        //   Use: When partial success is acceptable (emails, notifications)
-        //
-        // CURRENT BUGGY CODE (Promise.all):
-        // map() creates array of email promises
-        // const emailPromise = absentEmployees.map((emp) => {
-        //   return sendEmail({...}); // Must RETURN the promise!
-        // });
-        // await Promise.all(emailPromise); // ❌ STOPS ON FIRST ERROR
-        //
-        // FIXED CODE (Promise.allSettled):
-        // map() creates array of email promises
         const emailPromises = absentEmployees.map((emp) => {
           // sendEmail returns promise - must be RETURNED
           return sendEmail({
