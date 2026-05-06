@@ -263,10 +263,9 @@ const attendanceReminderCron = inngest.createFunction(
     // Step 6: Send reminder emails to absent employees
     if (absentEmployees.length > 0) {
       await step.run("send-reminder-emails", async () => {
-        // map() creates array of email promises
-        const emailPromise = absentEmployees.map((emp) => {
-          // sendEmail returns promise
-          sendEmail({
+        const emailPromises = absentEmployees.map((emp) => {
+          // sendEmail returns promise - must be RETURNED
+          return sendEmail({
             to: emp.email,
             subject: "Attendance Reminder - Please Mark Your Attendance",
             body: ` <div style="max-width: 600px; font-family: Arial, sans-serif;">
@@ -282,9 +281,27 @@ const attendanceReminderCron = inngest.createFunction(
                     </div>`,
           });
         });
-        // Promise.all() - Waits for all email sends to complete in parallel
-        await Promise.all(emailPromise);
-        return { emailSent: absentEmployees.length };
+        
+        // Promise.allSettled() - Waits for ALL emails (success or failure)
+        // Returns array of results: { status: "fulfilled"|"rejected", value|reason }
+        const results = await Promise.allSettled(emailPromises);
+        
+        // Count successful and failed emails
+        const successful = results.filter((r) => r.status === "fulfilled").length;
+        const failed = results.filter((r) => r.status === "rejected").length;
+        
+        // Log failures for debugging
+        results.forEach((result, index) => {
+          if (result.status === "rejected") {
+            console.error(
+              `Email failed for ${absentEmployees[index].email}:`,
+              result.reason
+            );
+          }
+        });
+        
+        // Return summary (all attempts made, even if some failed)
+        return { emailSent: successful, emailFailed: failed };
       });
     }
 
