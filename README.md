@@ -1,3 +1,5 @@
+# --- Please Use Personal Computer For Any Setup or Hands-on ---
+
 # Fullstack EMS (Employee Management System)
 
 A comprehensive **Employee Management System** built with the **MERN stack** (MongoDB, Express.js, React, Node.js). This application provides complete HR management capabilities including employee records, attendance tracking, leave management, payroll generation, and admin dashboards.
